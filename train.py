@@ -3,6 +3,7 @@ import numpy as np
 import mlflow
 import mlflow.sklearn
 import os
+import xgboost
 from sklearn.model_selection import train_test_split, RandomizedSearchCV
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler, OneHotEncoder

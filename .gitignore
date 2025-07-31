@@ -1,9 +1,7 @@
 # Dados
 data/
 
-# MLflow
-mlruns/
-mlflow.db
+
 
 # Virtual environment
 .venv/

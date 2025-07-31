@@ -1,0 +1,22 @@
+artifact_path: file:C:/Users/Duda/Documents/GitHub/aps-projeto/mlruns/1/models/m-959f1c873ac943d0b7b036f5dd3b0e9c/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.13.3
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.7.1
+mlflow_version: 3.1.4
+model_id: m-959f1c873ac943d0b7b036f5dd3b0e9c
+model_size_bytes: 249925
+model_uuid: m-959f1c873ac943d0b7b036f5dd3b0e9c
+prompts: null
+run_id: 61d1e07c5a3b4210b32fd0b874b24a1f
+utc_time_created: '2025-07-31 02:56:12.596758'

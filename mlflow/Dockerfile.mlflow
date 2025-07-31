@@ -1,0 +1,11 @@
+FROM python:3.9-slim
+
+RUN pip install mlflow==2.10.1
+
+EXPOSE 5000
+
+CMD mlflow server \
+    --backend-store-uri sqlite:///mlflow.db \
+    --default-artifact-root ./mlruns \
+    --host ${MLFLOW_HOST} \
+    --port ${MLFLOW_PORT}

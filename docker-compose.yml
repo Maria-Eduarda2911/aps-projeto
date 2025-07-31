@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  mlflow:
+    image: mlflow:latest
+    build:
+      context: ./mlflow
+      dockerfile: Dockerfile.mlflow
+    environment:
+      MLFLOW_HOST: 0.0.0.0
+      MLFLOW_PORT: 5000
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./mlruns:/mlflow/mlruns
+      - ./mlflow.db:/mlflow/mlflow.db
+    networks:
+      - obesity-net
+
+  model:
+    build:
+      context: ./model-serving
+      dockerfile: Dockerfile.model
+    environment:
+      MODEL_URI: models:/ObesityModel/1
+    ports:
+      - "5001:5001"
+    depends_on:
+      - mlflow
+    networks:
+      - obesity-net
+
+  web:
+    build:
+      context: ./web-app
+      dockerfile: Dockerfile.web
+    environment:
+      MODEL_SERVICE: http://model:5001/invocations
+    ports:
+      - "5000:5000"
+    depends_on:
+      - model
+    networks:
+      - obesity-net
+
+networks:
+  obesity-net:

@@ -1,0 +1,18 @@
+# Dados
+data/
+
+# MLflow
+mlruns/
+mlflow.db
+
+# Virtual environment
+.venv/
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Outros
+.DS_Store
+.env

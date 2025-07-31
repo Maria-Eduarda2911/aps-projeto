@@ -1,0 +1,25 @@
+# 1. Usa uma imagem leve do Python 3.9
+FROM python:3.9-slim
+
+# 2. Define o diretório de trabalho dentro do container
+WORKDIR /app
+
+# 3. Copia o arquivo de dependências primeiro (otimiza cache)
+COPY requirements.txt .
+
+# 4. Instala as dependências do Python
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 5. Copia todo o código da aplicação (app.py, templates/, etc.)
+COPY . .
+
+# 6. Define variáveis de ambiente
+ENV FLASK_APP=app.py
+ENV FLASK_ENV=production
+ENV MODEL_SERVICE=http://model-service:5001/invocations  
+
+# 7. Expõe a porta 5000 (internamente no container)
+EXPOSE 5000
+
+# 8. Comando para iniciar a aplicação com Gunicorn (servidor de produção)
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "4", "app:app"]

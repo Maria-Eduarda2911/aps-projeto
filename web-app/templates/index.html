@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Predição de Obesidade</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .container { background: #f5f5f5; padding: 20px; border-radius: 8px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Predição de Taxa de Obesidade</h1>
+        <form id="uploadForm">
+            <input type="file" id="csvFile" accept=".csv">
+            <button type="submit">Prever</button>
+        </form>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const fileInput = document.getElementById('csvFile');
+            const resultsDiv = document.getElementById('results');
+            
+            if (!fileInput.files.length) {
+                resultsDiv.innerHTML = '<p>Selecione um arquivo CSV</p>';
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            
+            try {
+                resultsDiv.innerHTML = '<p>Processando...</p>';
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    resultsDiv.innerHTML = `<p class="error">${data.error}</p>`;
+                    return;
+                }
+                
+                if (data.predictions && data.predictions.length > 0) {
+                    let table = '<table><tr>';
+                    for (const key in data.predictions[0]) {
+                        table += `<th>${key}</th>`;
+                    }
+                    table += '</tr>';
+                    
+                    data.predictions.forEach(row => {
+                        table += '<tr>';
+                        for (const key in row) {
+                            table += `<td>${row[key]}</td>`;
+                        }
+                        table += '</tr>';
+                    });
+                    
+                    table += '</table>';
+                    resultsDiv.innerHTML = table;
+                } else {
+                    resultsDiv.innerHTML = '<p>Nenhum resultado encontrado</p>';
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = `<p class="error">Erro: ${error.message}</p>`;
+            }
+        });
+    </script>
+</body>
+</html>
